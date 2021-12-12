@@ -21,6 +21,8 @@ enum class Token_kind
 	close_brace,
 	comma,
 	space,
+	newline,
+	tab,
 	semicolon,
 	ampersand,
 	double_ampersand,

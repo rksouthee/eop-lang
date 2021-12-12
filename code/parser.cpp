@@ -12,6 +12,8 @@ struct Not_whitespace_or_comment
 		switch (x.kind)
 		{
 		case Token_kind::comment:
+		case Token_kind::newline:
+		case Token_kind::tab:
 		case Token_kind::space: {
 			return false;
 		} break;

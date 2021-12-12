@@ -275,6 +275,14 @@ auto Token_iterator::operator++() -> Token_iterator&
 		m_value.kind = Token_kind::space;
 	} break;
 
+	case '\n': {
+		m_value.kind = Token_kind::newline;
+	} break;
+
+	case '\t': {
+		m_value.kind = Token_kind::tab;
+	} break;
+
 	case ';': {
 		m_value.kind = Token_kind::semicolon;
 	} break;
