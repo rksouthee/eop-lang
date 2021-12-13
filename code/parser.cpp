@@ -959,6 +959,7 @@ auto parse_control_statement() -> bool
  */
 auto parse_compound() -> bool
 {
+	symbol_push_scope();
 	if (!match(Token_kind::open_brace))
 	{
 		return false;
@@ -972,6 +973,7 @@ auto parse_compound() -> bool
 		}
 	}
 
+	symbol_pop_scope();
 	return true;
 }
 

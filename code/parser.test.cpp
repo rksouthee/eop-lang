@@ -111,3 +111,18 @@ TEST_CASE("Parse template specialization", "[parser]")
 	const char* input_end = input + sizeof(input) - 1;
 	REQUIRE(parse(input, input_end));
 }
+
+TEST_CASE("Parse scoping", "[parser]")
+{
+	const char input[] =
+		"int main()"
+		"{"
+		"typedef Pair type;"
+		"}"
+		"int fun()"
+		"{"
+		"type<int, int> foo;"
+		"}";
+	const char* input_end = input + sizeof(input) - 1;
+	REQUIRE(!parse(input, input_end));
+}

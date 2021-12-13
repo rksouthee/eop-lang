@@ -19,6 +19,8 @@ struct Symbol
 };
 
 auto symbols_initialize() -> void;
+auto symbol_push_scope() -> void;
+auto symbol_pop_scope() -> void;
 auto symbol_push(const char* first, const char* last, Symbol_kind kind) -> const Symbol*;
 auto symbol_get(const char* first, const char* last) -> const Symbol*;
 
