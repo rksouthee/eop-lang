@@ -89,15 +89,9 @@ auto parse_additive_list() -> bool
  */
 auto parse_primary() -> bool
 {
-	// TODO clean up, handle literal ("true" | "false")
-	if (match("typename"))
+	// template_name = (structure_name | procedure_name) ["<" additive_list ">"].
+	if (peek(Token_kind::identifier))
 	{
-		return true;
-	}
-
-	switch (s_token_iter->kind)
-	{
-	case Token_kind::identifier: {
 		const Symbol* symbol = symbol_get(s_token_iter->begin, s_token_iter->end);
 		if (symbol && (symbol->kind == Symbol_kind::type || symbol->kind == Symbol_kind::procedure))
 		{
@@ -109,35 +103,50 @@ auto parse_primary() -> bool
 					return false;
 				}
 
-				return match(Token_kind::greater);
+				if (!match(Token_kind::greater))
+				{
+					return false;
+				}
 			}
-			else
-			{
-				return true;
-			}
-		}
-		else
-		{
-			++s_token_iter;
 			return true;
 		}
-	} break;
-
-	case Token_kind::integer:
-	case Token_kind::real: {
-		++s_token_iter;
-		return true;
-	} break;
-
-	case Token_kind::open_paren: {
-		++s_token_iter;
-		return parse_expression() && match(Token_kind::close_paren);
-	} break;
-
-	default: {
-		return false;
-	} break;
 	}
+
+	// literal = boolean | integer | real.
+	if (match("true") || match("false") || match(Token_kind::integer) || match(Token_kind::real))
+	{
+		return true;
+	}
+
+	// "(" expression ")"
+	if (match(Token_kind::open_paren))
+	{
+		if (!parse_expression())
+		{
+			return false;
+		}
+
+		return match(Token_kind::close_paren);
+	}
+
+	// basic_type = "bool" | "int" | "double".
+	if (match("bool") || match("int") || match("double"))
+	{
+		return true;
+	}
+
+	// "typename"
+	if (match("typename"))
+	{
+		return true;
+	}
+
+	if (match(Token_kind::identifier))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /*
